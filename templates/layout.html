@@ -1,0 +1,39 @@
+<!doctype html>
+<title>jQuery Example</title>
+<script type="text/javascript"
+  src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript">
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+<style>
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+input[type=text] {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 2px 0;
+    box-sizing: border-box;
+    font-size:15px;
+}
+input[type=submit] {
+    width: 10%;
+    padding: 12px 20px;
+    margin: 0px 0px;
+    box-sizing: border-box;
+}
+h1{
+text-align:center;
+}
+p{text-align:center;}
+
+#main{
+width: 90%;
+margin: auto;
+}
+
+</style>
+{% block body %}{% endblock %}

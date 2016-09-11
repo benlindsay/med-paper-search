@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block body %}
+<script type="text/javascript" src="{{ url_for('static', filename='plot.js') }}"></script>
+<script type="text/javascript">
+  <!-- var yeardata []; -->
+  var yeardata = [{'year':'1980', 'count':0}, {'year':'1985', 'count':0}];
+  $(function() {
+    var api_root = 'http://ck-hackday.us-east-1.elasticbeanstalk.com/medline/'
+    var submit_form = function(e) {
+      $.getJSON($SCRIPT_ROOT + '/search/' + $('input[name="a"]').val(),
+        function(data) {
+          console.log(data);
+       var out = "<table align='center'>";
+       var rst_length=data.results.length;
+    console.log(data.results.length);
+        for(var i = 0; i < rst_length; i++) {
+            var yr = new Date(parseInt(data.results[i].pubdate));
+            console.log('yr='+yr);
+            out += "<tr><td>" +
+            data.results[i].itemtitle +
+            "</td><td>" +
+            yr.getFullYear() +
+            "</td></tr>";
+        }
+        out += "</table>";
+        console.log(out);
+        $("#table").html( out);
+          yeardata = data['yeardata'];
+          <!-- d3.select("svg").selectAll("*").remove(); -->
+          $('#graphdiv').html('');
+          drawMap(yeardata);
+          $('#result').text(data['numberfound']);
+          $('input[name=a]').focus().select();
+      });
+      return false;
+    };
+
+    $('#button').click(submit_form);
+    $('a#calculate').bind('click', submit_form);
+
+    $('input[type=text]').bind('keydown', function(e) {
+      if (e.keyCode == 13) {
+        submit_form(e);
+      }
+    });
+
+    $('input[name=a]').focus();
+
+  });
+</script>
+<div id="main">
+    <h1>Super powerful search</h1>
+    <p>
+    <input type="text" size="20" name="a"> 
+    <input id="button" type="submit" size="20" value="Search">
+    </p>
+    <div id='table'></div>
+    <div id="graphdiv" align="center"></div>
+</div>
+{% endblock %}
